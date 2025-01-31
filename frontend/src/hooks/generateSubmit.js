@@ -67,7 +67,7 @@ export const handleApiRequest = async ({
       };
   
       // Sending the data to the backend API to store in MongoDB
-      await fetch("http://127.0.0.1:8000/api/store_api_data", {
+      await fetch("https://ai.myedbox.com/api/store_api_data", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -98,7 +98,7 @@ export const handleApiRequest = async ({
       };
   
       // Sending the error data to the backend API to store in MongoDB
-      await fetch("http://127.0.0.1:8000/api/store_api_data", {
+      await fetch("https://ai.myedbox.com/api/store_api_data", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

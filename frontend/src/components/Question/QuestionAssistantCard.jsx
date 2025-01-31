@@ -41,7 +41,7 @@ export default function QuestionAssistantCard({
     setLoadingState((prev) => ({ ...prev, [question]: true })); // Set loading state for this question
     setButtonTextState((prev) => ({ ...prev, [question]: "Loading..." })); // Set button text to "Loading..."
     setQuestion(question); // Update question state
-    let answerUrl = "http://127.0.0.1:8000/api/answer";
+    let answerUrl = "https://ai.myedbox.com/api/answer";
     const payload = { grade, course, question };
 
     // Call the API to get the answer

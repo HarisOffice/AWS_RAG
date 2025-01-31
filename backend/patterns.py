@@ -41,4 +41,28 @@ patterns = {
             "\item A circle has a diameter between the points $A(-3, 4)$ and $B(11, 6)$. \textbf{Find the mid-point (centre) and radius of the circle.} \item OR In any triangle, the sum of the square on any two sides is equal to twice the square on half of the third side together with twice the square on the median which bisects the third side. (\textbf{Apollonius's theorem})"
         ]
     },
+"chemistry": {
+        "short": [
+            "What are Alkali metals? Write names and symbols of alkali metals?",
+            "Can you draw an ion which is formed by the atom losing three electrons?",
+            "Write uses of adhesive material.",
+            "Why salt dissolves in water?"
+            "Identify the Alloy. | Components | Alloy | |--------------------|----------------| | Cu–Zn | | | Cu–Al–Mg–Ni | | | Cu–Zn–Sn | |"
+            "Define the following terms: (a) Gram atomic mass (b) Gram molecular mass (c) Gram formula mass"
+        ],
+        "numerical": [
+            "A solution of 20 cm³ of alcohol is dissolved in 80 cm³ of water. Calculate the concentration (v/v) of this solution.",
+            "A gas occupies a volume of 40.0 dm³ at standard temperature (0°C) and pressure (1 atm). When pressure is increased up to 3 atm at unchanged temperature, what would be the new volume?",
+            "Convert the following units: (A) 100°C to K, (B) 150°C to K, (C) 780K to °C, (D) 170 K to °C",
+            "A 78ml sample of gas is heated from 35°C to 80°C at constant pressure. What is the final volume?",
+            "Balance the following equations by inspection method: (e) CO + O₂ → CO₂"
+        ],
+        "long": [
+            "Define the term solubility. How does nature of solute and solvent determine the extent of dissolution?",
+            "Explain the process of electrolysis in an electrolytic cell."
+            "What is a battery? How does a lead storage battery work?",
+            "Differentiate between amorphous and Crystalline Solids?",
+            "State and explain Faraday's first and second laws of electrolysis."
+        ]
+    },
 }

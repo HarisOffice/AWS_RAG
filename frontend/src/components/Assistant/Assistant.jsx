@@ -13,11 +13,18 @@ import {
   FormControlLabel,
   InputLabel,
   Alert,
+  Paper,
+  Divider,
+  Stepper,
+  Step,
+  StepLabel,
+  Card,
+  CardContent,
+  Container,
 } from "@mui/material";
 import { handleApiRequest } from "../../hooks/generateSubmit";
 import { useNavigate } from "react-router-dom";
 import { formID } from "../../hooks/generateID";
-import { getLocalTime } from "../../utils/time";
 import {
   method,
   outputType,
@@ -29,10 +36,12 @@ import {
 import MCQCards from "../Quiz/MCQCards";
 import BlankCards from "../Quiz/BlankCards";
 import QuestionAssistantCard from "../Question/QuestionAssistantCard";
+
+const steps = ["Basic Info", "Select Content", "Question Pattern"];
 export default function Assistant() {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
-    method: "book",
+    method: "",
     outputType: "",
     grade: "9",
     course: "",
@@ -78,6 +87,38 @@ export default function Assistant() {
   //   generateFormID(); // Call the async function
   // }, [setGenerateID,loading]);
 
+  const getActiveStep = () => {
+    if (
+      !formData.method ||
+      !formData.outputType ||
+      !formData.grade ||
+      !formData.course
+    ) {
+      return 0; // Basic Info step
+    }
+
+    if (formData.method === "book" && formData.outputType === "generation") {
+      if (!formData.chapters.length || !formData.topics.length) {
+        return 1; // Content Selection step
+      }
+    } else if (
+      formData.method === "paper" &&
+      formData.outputType === "retrieval"
+    ) {
+      if (!formData.chapters.length || !formData.years.length) {
+        return 1; // Content Selection step
+      }
+    } else if (
+      formData.method === "book" &&
+      formData.outputType === "retrieval"
+    ) {
+      if (!formData.chapters.length) {
+        return 1; // Content Selection step
+      }
+    }
+    return 2; // Question Pattern step
+  };
+
   useEffect(() => {
     const fetchChapters = async () => {
       const payload = {
@@ -86,7 +127,7 @@ export default function Assistant() {
       };
 
       try {
-        const response = await fetch("http://127.0.0.1:8000/api/chapters", {
+        const response = await fetch("https://ai.myedbox.com/api/chapters", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -132,7 +173,7 @@ export default function Assistant() {
       };
 
       try {
-        const response = await fetch("http://127.0.0.1:8000/api/topics", {
+        const response = await fetch("https://ai.myedbox.com/api/topics", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -370,11 +411,11 @@ export default function Assistant() {
         topic: topicsWithChapters,
       };
 
-      mcqs = "http://127.0.0.1:8000/api/objective/mcqs";
-      blanks = "http://127.0.0.1:8000/api/objective/blanks";
-      descriptive = "http://127.0.0.1:8000/api/short/descriptive";
-      numerical = "http://127.0.0.1:8000/api/short/numerical";
-      long = "http://127.0.0.1:8000/api/long/descriptive";
+      mcqs = "https://ai.myedbox.com/api/objective/mcqs";
+      blanks = "https://ai.myedbox.com/api/objective/blanks";
+      descriptive = "https://ai.myedbox.com/api/short/descriptive";
+      numerical = "https://ai.myedbox.com/api/short/numerical";
+      long = "https://ai.myedbox.com/api/long/descriptive";
     } else if (
       formData.method === "book" &&
       formData.outputType === "retrieval"
@@ -390,7 +431,8 @@ export default function Assistant() {
         grade: parseInt(formData.grade, 10),
         course: formData.course,
         quantity: parseInt(formData.numberOfDescriptive, 10),
-        topic: formData.topics,
+        section: "B",
+        chapter: formData.chapters,
         questionType: 0,
       };
 
@@ -398,7 +440,8 @@ export default function Assistant() {
         grade: parseInt(formData.grade, 10),
         course: formData.course,
         quantity: parseInt(formData.numberOfNumericals, 10),
-        topic: formData.topics,
+        section: "B",
+        chapter: formData.chapters,
         questionType: 1,
       };
 
@@ -406,15 +449,16 @@ export default function Assistant() {
         grade: parseInt(formData.grade, 10),
         course: formData.course,
         quantity: parseInt(formData.numberOfLong, 10),
-        difficulty: formData.difficulty,
-        topic: topicsWithChapters,
+        section: "C",
+        chapter: formData.chapters,
+        questionType: 0,
       };
 
-      mcqs = "http://127.0.0.1:8000/api/book/mcqs";
+      mcqs = "https://ai.myedbox.com/api/book/mcqs";
       blanks = "";
-      descriptive = "http://127.0.0.1:8000/api/book/questions";
-      numerical = "http://127.0.0.1:8000/api/book/questions";
-      long = "http://127.0.0.1:8000/api/long/descriptive";
+      descriptive = "https://ai.myedbox.com/api/book/questions";
+      numerical = "https://ai.myedbox.com/api/book/questions";
+      long = "https://ai.myedbox.com/api/book/questions";
     } else if (
       formData.method === "paper" &&
       formData.outputType === "retrieval"
@@ -453,11 +497,11 @@ export default function Assistant() {
         years: formData.years,
       };
 
-      mcqs = "http://127.0.0.1:8000/api/paper/paperMcq";
+      mcqs = "https://ai.myedbox.com/api/paper/paperMcq";
       blanks = "";
-      descriptive = "http://127.0.0.1:8000/api/getPaper";
-      numerical = "http://127.0.0.1:8000/api/getPaper";
-      long = "http://127.0.0.1:8000/api/getPaper";
+      descriptive = "https://ai.myedbox.com/api/getPaper";
+      numerical = "https://ai.myedbox.com/api/getPaper";
+      long = "https://ai.myedbox.com/api/getPaper";
     }
 
     if (formData.outputType === "retrieval") {
@@ -683,11 +727,11 @@ export default function Assistant() {
   //       topic: topicsWithChapters,
   //     };
 
-  //     mcqs = "http://127.0.0.1:8000/api/objective/mcqs";
-  //     blanks = "http://127.0.0.1:8000/api/objective/blanks";
-  //     descriptive = "http://127.0.0.1:8000/api/short/descriptive";
-  //     numerical = "http://127.0.0.1:8000/api/short/numerical";
-  //     long = "http://127.0.0.1:8000/api/long/descriptive";
+  //     mcqs = "https://ai.myedbox.com/api/objective/mcqs";
+  //     blanks = "https://ai.myedbox.com/api/objective/blanks";
+  //     descriptive = "https://ai.myedbox.com/api/short/descriptive";
+  //     numerical = "https://ai.myedbox.com/api/short/numerical";
+  //     long = "https://ai.myedbox.com/api/long/descriptive";
   //   } else if (
   //     formData.method === "book" &&
   //     formData.outputType === "retrieval"
@@ -723,11 +767,11 @@ export default function Assistant() {
   //       topic: topicsWithChapters,
   //     };
 
-  //     mcqs = "http://127.0.0.1:8000/api/book/mcqs";
+  //     mcqs = "https://ai.myedbox.com/api/book/mcqs";
   //     blanks = "";
-  //     descriptive = "http://127.0.0.1:8000/api/book/questions";
-  //     numerical = "http://127.0.0.1:8000/api/book/questions";
-  //     long = "http://127.0.0.1:8000/api/long/descriptive";
+  //     descriptive = "https://ai.myedbox.com/api/book/questions";
+  //     numerical = "https://ai.myedbox.com/api/book/questions";
+  //     long = "https://ai.myedbox.com/api/long/descriptive";
   //   } else if (
   //     formData.method === "paper" &&
   //     formData.outputType === "retrieval"
@@ -766,11 +810,11 @@ export default function Assistant() {
   //       years: formData.years,
   //     };
 
-  //     mcqs = "http://127.0.0.1:8000/api/paper/paperMcq";
+  //     mcqs = "https://ai.myedbox.com/api/paper/paperMcq";
   //     blanks = "";
-  //     descriptive = "http://127.0.0.1:8000/api/getPaper";
-  //     numerical = "http://127.0.0.1:8000/api/getPaper";
-  //     long = "http://127.0.0.1:8000/api/getPaper";
+  //     descriptive = "https://ai.myedbox.com/api/getPaper";
+  //     numerical = "https://ai.myedbox.com/api/getPaper";
+  //     long = "https://ai.myedbox.com/api/getPaper";
   //   }
 
   //   if (formData.outputType === "retrieval") {
@@ -888,580 +932,641 @@ export default function Assistant() {
   };
 
   return (
-    <Box p={4} sx={{ backgroundColor: "#f9f9f9", minHeight: "100vh" }}>
-      <Grid container spacing={4}>
-        {/* Form Section */}
-        <Grid item xs={12} md={6}>
-          <Box
-            sx={{
-              p: 3,
-              backgroundColor: "#fff",
-              borderRadius: 2,
-              boxShadow: 3,
-            }}
-          >
-            <Typography variant="h4" gutterBottom className="text-center">
-              Paper
-            </Typography>
-            <form onSubmit={handleSubmit}>
-              {/* <form> */}
-              <Grid container spacing={2}>
-                <Grid item xs={12} md={12}>
-                  <TextField
-                    fullWidth
-                    name="method"
-                    select
-                    label="Paper From"
-                    value={formData.method}
-                    onChange={handleChange}
-                    disabled={loading}
-                  >
-                    {method.map((option) => (
-                      <MenuItem key={option.value} value={option.value}>
-                        {option.label}
-                      </MenuItem>
-                    ))}
-                  </TextField>
-                </Grid>
-                <Grid item xs={12} md={12}>
-                  <TextField
-                    fullWidth
-                    name="outputType"
-                    select
-                    label="Method"
-                    value={formData.outputType}
-                    onChange={handleChange}
-                    disabled={loading}
-                  >
-                    {outputType
-                      .filter(
-                        (option) =>
-                          formData.method === "book" ||
-                          option.label.toLowerCase() !== "generation"
-                      ) // Conditionally filter options
-                      .map((option) => (
-                        <MenuItem key={option.value} value={option.value}>
-                          {option.label}
-                        </MenuItem>
-                      ))}
-                  </TextField>
-                </Grid>
-                {formData.outputType !== "" ? (
-                  <>
-                    <Grid item xs={12} md={6}>
-                      <TextField
-                        fullWidth
-                        name="grade"
-                        select
-                        label="Grade"
-                        value={formData.grade}
-                        onChange={handleChange}
-                        disabled={loading}
-                      >
-                        {grades.map((option) => (
-                          <MenuItem key={option.value} value={option.value}>
-                            {option.label}
-                          </MenuItem>
-                        ))}
-                      </TextField>
-                    </Grid>
-                    <Grid item xs={12} md={6}>
-                      <TextField
-                        fullWidth
-                        name="course"
-                        select
-                        label="Course"
-                        value={formData.course}
-                        onChange={handleChange}
-                        disabled={loading}
-                      >
-                        {courses.map((option) => (
-                          <MenuItem key={option.value} value={option.value}>
-                            {option.label}
-                          </MenuItem>
-                        ))}
-                      </TextField>
-                    </Grid>
-                  </>
-                ) : (
-                  ""
-                )}
-                {formData.course ? (
-                  <Grid item xs={12} md={12}>
-                    <FormControl fullWidth>
-                      <InputLabel id="chapter-label">Chapters</InputLabel>{" "}
-                      <Select
-                        fullWidth
-                        multiple
-                        value={formData.chapters} // Ensure 'chapters' array is used
-                        onChange={handleChange}
-                        name="chapters" // Use the correct form field name
-                        renderValue={(selected) => selected.join(", ")} // Display selected chapters
-                        disabled={loading}
-                      >
-                        {chapters.map((option) => (
-                          <MenuItem key={option.value} value={option.value}>
-                            <Checkbox
-                              checked={formData.chapters.includes(option.value)} // Check if the chapter is selected
-                            />
-                            {option.label} {/* Display the chapter name */}
-                          </MenuItem>
-                        ))}
-                      </Select>
-                    </FormControl>
-                  </Grid>
-                ) : (
-                  ""
-                )}
-                {formData.chapters.length !== 0 ? (
-                  formData.method !== "paper" ? (
-                    <>
-                      <Grid item xs={12} md={12}>
-                        <FormControl fullWidth>
-                          <InputLabel id="topic-label">Topics</InputLabel>
-                          <Select
-                            labelId="topic-label"
-                            fullWidth
-                            multiple
-                            value={formData.topics}
-                            onChange={handleChange}
-                            name="topics"
-                            renderValue={(selected) => selected.join(", ")}
-                            disabled={loading}
-                          >
-                            {topics && topics.length > 0 ? (
-                              topics.map((chapter) => [
+    <Box sx={{ backgroundColor: "#f5f5f5", minHeight: "100vh", py: 4 }}>
+      <Container maxWidth="xl">
+        <Grid container spacing={4}>
+          {/* Form Section */}
+          <Grid item xs={12} md={6}>
+            <Paper elevation={3} sx={{ p: 4, borderRadius: 2 }}>
+              <Typography
+                variant="h4"
+                gutterBottom
+                align="center"
+                color="primary"
+                sx={{ mb: 4 }}
+              >
+                Paper Generator
+              </Typography>
+
+              <Stepper activeStep={getActiveStep()} sx={{ mb: 4 }}>
+                {steps.map((label) => (
+                  <Step key={label}>
+                    <StepLabel>{label}</StepLabel>
+                  </Step>
+                ))}
+              </Stepper>
+
+              <form onSubmit={handleSubmit}>
+                <Grid container spacing={3}>
+                  {/* Basic Info Section */}
+                  <Grid item xs={12}>
+                    <Card variant="outlined" sx={{ mb: 3 }}>
+                      <CardContent>
+                        <Typography variant="h6" gutterBottom color="primary">
+                          Basic Information
+                        </Typography>
+                        <Grid container spacing={2}>
+                          <Grid item xs={12} md={12}>
+                            <TextField
+                              fullWidth
+                              name="method"
+                              select
+                              label="Paper From"
+                              value={formData.method}
+                              onChange={handleChange}
+                              disabled={loading}
+                            >
+                              {method.map((option) => (
                                 <MenuItem
-                                  key={`${chapter.chapter}-disabled`}
-                                  disabled
+                                  key={option.value}
+                                  value={option.value}
                                 >
-                                  {chapter.chapter}{" "}
-                                </MenuItem>,
-                                chapter.topics && chapter.topics.length > 0 ? (
-                                  chapter.topics.map((topic, index) => (
+                                  {option.label}
+                                </MenuItem>
+                              ))}
+                            </TextField>
+                          </Grid>
+                          <Grid item xs={12} md={12}>
+                            <TextField
+                              fullWidth
+                              name="outputType"
+                              select
+                              label="Method"
+                              value={formData.outputType}
+                              onChange={handleChange}
+                              disabled={loading}
+                            >
+                              {outputType
+                                .filter(
+                                  (option) =>
+                                    formData.method === "book" ||
+                                    option.label.toLowerCase() !== "generation"
+                                ) // Conditionally filter options
+                                .map((option) => (
+                                  <MenuItem
+                                    key={option.value}
+                                    value={option.value}
+                                  >
+                                    {option.label}
+                                  </MenuItem>
+                                ))}
+                            </TextField>
+                          </Grid>
+                          {formData.outputType !== "" ? (
+                            <>
+                              <Grid item xs={12} md={6}>
+                                <TextField
+                                  fullWidth
+                                  name="grade"
+                                  select
+                                  label="Grade"
+                                  value={formData.grade}
+                                  onChange={handleChange}
+                                  disabled={loading}
+                                >
+                                  {grades.map((option) => (
                                     <MenuItem
-                                      key={topic.value}
-                                      value={topic.value}
+                                      key={option.value}
+                                      value={option.value}
+                                    >
+                                      {option.label}
+                                    </MenuItem>
+                                  ))}
+                                </TextField>
+                              </Grid>
+                              <Grid item xs={12} md={6}>
+                                <TextField
+                                  fullWidth
+                                  name="course"
+                                  select
+                                  label="Course"
+                                  value={formData.course}
+                                  onChange={handleChange}
+                                  disabled={loading}
+                                >
+                                  {courses.map((option) => (
+                                    <MenuItem
+                                      key={option.value}
+                                      value={option.value}
+                                    >
+                                      {option.label}
+                                    </MenuItem>
+                                  ))}
+                                </TextField>
+                              </Grid>
+                            </>
+                          ) : (
+                            ""
+                          )}
+
+                          {/* ... (similar styled fields for outputType, grade, course) */}
+                        </Grid>
+                      </CardContent>
+                    </Card>
+
+                    {/* Content Selection Section */}
+                    {formData.course && (
+                      <Card variant="outlined" sx={{ mb: 3 }}>
+                        <CardContent>
+                          <Typography variant="h6" gutterBottom color="primary">
+                            Content Selection
+                          </Typography>
+                          {/* ... (chapters and topics selection with similar styling) */}
+                          {formData.course ? (
+                            <Grid item xs={12} md={12}>
+                              <FormControl fullWidth>
+                                <InputLabel id="chapter-label">
+                                  Chapters
+                                </InputLabel>{" "}
+                                <Select
+                                  fullWidth
+                                  multiple
+                                  value={formData.chapters} // Ensure 'chapters' array is used
+                                  onChange={handleChange}
+                                  name="chapters" // Use the correct form field name
+                                  renderValue={(selected) =>
+                                    selected.join(", ")
+                                  } // Display selected chapters
+                                  disabled={loading}
+                                >
+                                  {chapters.map((option) => (
+                                    <MenuItem
+                                      key={option.value}
+                                      value={option.value}
                                     >
                                       <Checkbox
-                                        checked={formData.topics.includes(
-                                          topic.value
-                                        )}
+                                        checked={formData.chapters.includes(
+                                          option.value
+                                        )} // Check if the chapter is selected
                                       />
-                                      {topic.value} ({index + 1}){" "}
+                                      {option.label}{" "}
+                                      {/* Display the chapter name */}
                                     </MenuItem>
-                                  ))
-                                ) : (
-                                  <MenuItem disabled>
-                                    No topics available
-                                  </MenuItem>
-                                ),
-                              ])
+                                  ))}
+                                </Select>
+                              </FormControl>
+                            </Grid>
+                          ) : (
+                            ""
+                          )}
+                          {formData.chapters.length !== 0 ? (
+                            formData.method === "book" &&
+                            formData.outputType === "generation" ? (
+                              <>
+                                <Grid item xs={12} md={12} sx={{ mt: 3 }}>
+                                  <FormControl fullWidth>
+                                    <InputLabel id="topic-label">
+                                      Topics
+                                    </InputLabel>
+                                    <Select
+                                      labelId="topic-label"
+                                      fullWidth
+                                      multiple
+                                      value={formData.topics}
+                                      onChange={handleChange}
+                                      name="topics"
+                                      renderValue={(selected) =>
+                                        selected.join(", ")
+                                      }
+                                      disabled={loading}
+                                    >
+                                      {topics && topics.length > 0 ? (
+                                        topics.map((chapter) => [
+                                          <MenuItem
+                                            key={`${chapter.chapter}-disabled`}
+                                            disabled
+                                          >
+                                            {chapter.chapter}
+                                          </MenuItem>,
+                                          chapter.topics &&
+                                          chapter.topics.length > 0 ? (
+                                            chapter.topics.map(
+                                              (topic, index) => (
+                                                <MenuItem
+                                                  key={topic.value}
+                                                  value={topic.value}
+                                                >
+                                                  <Checkbox
+                                                    checked={formData.topics.includes(
+                                                      topic.value
+                                                    )}
+                                                  />
+                                                  {topic.value} ({index + 1})
+                                                </MenuItem>
+                                              )
+                                            )
+                                          ) : (
+                                            <MenuItem disabled>
+                                              No topics available
+                                            </MenuItem>
+                                          ),
+                                        ])
+                                      ) : (
+                                        <MenuItem disabled>
+                                          No chapters available
+                                        </MenuItem>
+                                      )}
+                                    </Select>
+                                  </FormControl>
+                                </Grid>
+                              </>
+                            ) : formData.method === "paper" &&
+                              formData.outputType === "retrieval" ? (
+                              <Grid item xs={12} md={12} sx={{ mt: 3 }}>
+                                <FormControl fullWidth>
+                                  <InputLabel id="year-label">Years</InputLabel>
+                                  <Select
+                                    fullWidth
+                                    multiple
+                                    value={formData.years}
+                                    onChange={handleChange}
+                                    name="years"
+                                    renderValue={(selected) =>
+                                      selected.join(", ")
+                                    }
+                                    disabled={loading}
+                                  >
+                                    {years.map((option) => (
+                                      <MenuItem
+                                        key={option.value}
+                                        value={option.value}
+                                      >
+                                        <Checkbox
+                                          checked={formData.years.includes(
+                                            option.value
+                                          )}
+                                        />
+                                        {option.label}
+                                      </MenuItem>
+                                    ))}
+                                  </Select>
+                                </FormControl>
+                              </Grid>
+                            ) : null
+                          ) : null}
+                        </CardContent>
+                      </Card>
+                    )}
+
+                    {/* Question Pattern Section */}
+                    {(formData.topics.length !== 0 ||
+                      formData.years.length !== 0 ||
+                      (formData.method === "book" &&
+                        formData.outputType === "retrieval" &&
+                        formData.chapters.length !== 0)) && (
+                      <Card variant="outlined">
+                        <CardContent>
+                          <Typography variant="h6" gutterBottom color="primary">
+                            Question Pattern
+                          </Typography>
+
+                          <Box sx={{ mb: 3 }}>
+                            <Typography
+                              variant="subtitle1"
+                              color="primary"
+                              gutterBottom
+                            >
+                              Objective Questions
+                            </Typography>
+                            <Divider sx={{ mb: 2 }} />
+                            {formData.outputType === "generation" ? (
+                              <>
+                                <Grid item xs={12} md={12}>
+                                  <TextField
+                                    fullWidth
+                                    name="numberOfObjective"
+                                    label="Number of Objective"
+                                    type="number"
+                                    onBlur={handleBlur}
+                                    value={formData.numberOfObjective}
+                                    onChange={handleChange}
+                                    inputProps={{ min: 0, max: 10 }}
+                                    disabled={loading}
+                                  />
+                                </Grid>
+                                {formData.numberOfObjective !== 0 && (
+                                  <Grid container spacing={2} sx={{ mt: 3 }}>
+                                    <Grid item xs={12} md={6}>
+                                      <TextField
+                                        fullWidth
+                                        name="numberOfMCQs"
+                                        label="Number of MCQs"
+                                        type="number"
+                                        onBlur={handleBlur}
+                                        value={formData.numberOfMCQs}
+                                        onChange={handleChange}
+                                        inputProps={{ min: 0, max: 10 }}
+                                        disabled={loading}
+                                      />
+                                    </Grid>
+                                    <Grid item xs={12} md={6}>
+                                      <TextField
+                                        fullWidth
+                                        name="numberOfBlanks"
+                                        label="Number of Blanks"
+                                        type="number"
+                                        onBlur={handleBlur}
+                                        value={formData.numberOfBlanks}
+                                        onChange={handleChange}
+                                        inputProps={{ min: 0, max: 10 }}
+                                        disabled={loading}
+                                      />
+                                    </Grid>
+                                  </Grid>
+                                )}
+                              </>
                             ) : (
-                              <MenuItem disabled>
-                                No chapters available
-                              </MenuItem>
+                              <Grid item xs={12} md={12}>
+                                <TextField
+                                  fullWidth
+                                  name="numberOfMCQs"
+                                  label="Number of MCQs"
+                                  type="number"
+                                  onBlur={handleBlur}
+                                  value={formData.numberOfMCQs}
+                                  onChange={handleChange}
+                                  inputProps={{ min: 0, max: 10 }}
+                                  disabled={loading}
+                                />
+                              </Grid>
                             )}
-                          </Select>
-                        </FormControl>
-                      </Grid>
-                    </>
-                  ) : (
-                    <Grid item xs={12} md={12}>
-                      <FormControl fullWidth>
-                        <InputLabel id="year-label">Years</InputLabel>{" "}
-                        <Select
-                          fullWidth
-                          multiple
-                          value={formData.years}
-                          onChange={handleChange}
-                          name="years"
-                          renderValue={(selected) => selected.join(", ")}
-                          disabled={loading}
-                        >
-                          {years.map((option) => (
-                            <MenuItem key={option.value} value={option.value}>
-                              <Checkbox
-                                checked={formData.years.includes(option.value)}
-                              />
-                              {option.label}
-                            </MenuItem>
-                          ))}
-                        </Select>
-                      </FormControl>
-                    </Grid>
-                  )
-                ) : (
-                  ""
-                )}
-                {formData.topics.length !== 0 ||
-                (formData.method === "paper" &&
-                  formData.chapters.length !== 0) ? (
-                  <>
-                    <Grid item xs={12} md={12}>
-                      <Typography
-                        variant="h6"
-                        gutterBottom
-                        className="text-center"
-                      >
-                        Paper Pattern
-                      </Typography>
-                    </Grid>
+                            {objectiveAlert && (
+                              <Grid item xs={12} md={12}>
+                                <Alert severity="warning">
+                                  The number of Objectives must be equal to the
+                                  sum of MCQs and Blanks.
+                                </Alert>
+                              </Grid>
+                            )}
+                          </Box>
 
-                    <Grid item xs={12} md={12}>
-                      <Typography variant="subtitle1" gutterBottom>
-                        Objective Questions
-                      </Typography>
-                    </Grid>
-                    {formData.outputType === "generation" ? (
-                      <>
-                        <Grid item xs={12} md={12}>
-                          <TextField
-                            fullWidth
-                            name="numberOfObjective"
-                            label="Number of Objective"
-                            type="number"
-                            onBlur={handleBlur}
-                            value={formData.numberOfObjective}
-                            onChange={handleChange}
-                            inputProps={{ min: 0, max: 10 }}
-                            disabled={loading}
-                          />
-                        </Grid>
-                        {formData.numberOfObjective !== 0 ? (
-                          <>
-                            <Grid item xs={12} md={6}>
+                          <Box sx={{ mb: 3 }}>
+                            <Typography
+                              variant="subtitle1"
+                              color="primary"
+                              gutterBottom
+                            >
+                              Short Questions
+                            </Typography>
+                            <Divider sx={{ mb: 2 }} />
+                            <Grid item xs={12} md={12}>
                               <TextField
                                 fullWidth
-                                name="numberOfMCQs"
-                                label="Number of MCQs"
+                                name="numberOfShort"
+                                label="Number of Short"
                                 type="number"
                                 onBlur={handleBlur}
-                                value={formData.numberOfMCQs}
+                                value={formData.numberOfShort}
                                 onChange={handleChange}
                                 inputProps={{ min: 0, max: 10 }}
                                 disabled={loading}
                               />
                             </Grid>
-                            <Grid item xs={12} md={6}>
+                            {formData.numberOfShort !== 0 ? (
+                              <Grid container spacing={2} sx={{ mt: 3 }}>
+                                <Grid item xs={12} md={6}>
+                                  <TextField
+                                    fullWidth
+                                    name="numberOfDescriptive"
+                                    label="Number of Descriptive (Short)"
+                                    type="number"
+                                    onBlur={handleBlur}
+                                    value={formData.numberOfDescriptive}
+                                    onChange={handleChange}
+                                    inputProps={{ min: 0, max: 10 }}
+                                    disabled={loading}
+                                  />
+                                </Grid>
+                                {formData.course !== "Mathematics" && (
+                                  <Grid item xs={12} md={6}>
+                                    <TextField
+                                      fullWidth
+                                      name="numberOfNumericals"
+                                      label="Number of Numericals (Short)"
+                                      type="number"
+                                      onBlur={handleBlur}
+                                      value={formData.numberOfNumericals}
+                                      onChange={handleChange}
+                                      inputProps={{ min: 0, max: 10 }}
+                                      disabled={loading}
+                                    />
+                                  </Grid>
+                                )}
+                              </Grid>
+                            ) : null}
+                            {shortAlert && (
+                              <Grid item xs={12} md={12}>
+                                <Alert severity="warning">
+                                  The number of Short Questions must be equal to
+                                  the sum of Descriptive and Numericals.
+                                </Alert>
+                              </Grid>
+                            )}
+                          </Box>
+
+                          <Box sx={{ mb: 3 }}>
+                            <Typography
+                              variant="subtitle1"
+                              color="primary"
+                              gutterBottom
+                            >
+                              Long Questions
+                            </Typography>
+                            <Divider sx={{ mb: 2 }} />
+                            <Grid item xs={12} md={12}>
                               <TextField
                                 fullWidth
-                                name="numberOfBlanks"
-                                label="Number of Blanks"
+                                name="numberOfLong"
+                                label="Number of Long"
                                 type="number"
                                 onBlur={handleBlur}
-                                value={formData.numberOfBlanks}
+                                value={formData.numberOfLong}
                                 onChange={handleChange}
                                 inputProps={{ min: 0, max: 10 }}
                                 disabled={loading}
                               />
                             </Grid>
-                          </>
-                        ) : (
-                          ""
-                        )}
-                      </>
-                    ) : (
-                      <>
-                        <Grid item xs={12} md={12}>
-                          <TextField
-                            fullWidth
-                            name="numberOfMCQs"
-                            label="Number of MCQs"
-                            type="number"
-                            onBlur={handleBlur}
-                            value={formData.numberOfMCQs}
-                            onChange={handleChange}
-                            inputProps={{ min: 0, max: 10 }}
-                            disabled={loading}
-                          />
-                        </Grid>
-                      </>
-                    )}
-                    {objectiveAlert ? (
-                      <Grid item xs={12} md={12}>
-                        <Alert severity="warning">
-                          The number of Objectives must be equal to the sum of
-                          MCQs and Blanks.
-                        </Alert>
-                      </Grid>
-                    ) : (
-                      ""
-                    )}
-
-                    <Grid item xs={12} md={12}>
-                      <Typography variant="subtitle1" gutterBottom>
-                        Short Questions
-                      </Typography>
-                    </Grid>
-
-                    <Grid item xs={12} md={12}>
-                      <TextField
-                        fullWidth
-                        name="numberOfShort"
-                        label="Number of Short"
-                        type="number"
-                        onBlur={handleBlur}
-                        value={formData.numberOfShort}
-                        onChange={handleChange}
-                        inputProps={{ min: 0, max: 10 }}
-                        disabled={loading}
-                      />
-                    </Grid>
-                    {formData.numberOfShort !== 0 ? (
-                      <>
-                        <Grid item xs={12} md={6}>
-                          <TextField
-                            fullWidth
-                            name="numberOfDescriptive"
-                            label="Number of Descriptive(Short)"
-                            type="number"
-                            onBlur={handleBlur}
-                            value={formData.numberOfDescriptive}
-                            onChange={handleChange}
-                            inputProps={{ min: 0, max: 10 }}
-                            disabled={loading}
-                          />
-                        </Grid>
-                        {formData.course!=="Mathematics" && (
-                        <Grid item xs={12} md={6}>
-                          <TextField
-                            fullWidth
-                            name="numberOfNumericals"
-                            label="Number of Numericals(Short)"
-                            type="number"
-                            onBlur={handleBlur}
-                            value={formData.numberOfNumericals}
-                            onChange={handleChange}
-                            inputProps={{ min: 0, max: 10 }}
-                            disabled={loading}
-                          />
-                        </Grid>
-                        )}
-                      </>
-                    ) : (
-                      ""
-                    )}
-                    {shortAlert ? (
-                      <Grid item xs={12} md={12}>
-                        <Alert severity="warning">
-                          The number of Short Questions must be equal to the sum
-                          of Descriptive and Numericals.
-                        </Alert>
-                      </Grid>
-                    ) : (
-                      ""
-                    )}
-                    <Grid item xs={12} md={12}>
-                      <Typography variant="subtitle1" gutterBottom>
-                        Long Questions
-                      </Typography>
-                    </Grid>
-                    <Grid item xs={12} md={12}>
-                      <TextField
-                        fullWidth
-                        name="numberOfLong"
-                        label="Number of Long"
-                        type="number"
-                        onBlur={handleBlur}
-                        value={formData.numberOfLong}
-                        onChange={handleChange}
-                        inputProps={{ min: 0, max: 10 }}
-                        disabled={loading}
-                      />
-                    </Grid>
-                    {formData.outputType !== "retrieval" ||
-                    formData.method !== "paper" ? (
-                      <Grid item xs={12} md={12}>
-                        <TextField
-                          fullWidth
-                          name="difficulty"
-                          select
-                          label="Difficulty"
-                          value={formData.difficulty}
-                          onChange={handleChange}
-                          disabled={loading}
-                        >
-                          {difficulty.map((option) => (
-                            <MenuItem key={option.value} value={option.value}>
-                              {option.label}
-                            </MenuItem>
-                          ))}
-                        </TextField>
-                      </Grid>
-                    ) : (
-                      ""
+                            {formData.outputType === "generation" &&
+                            formData.method === "book" ? (
+                              <Grid item xs={12} md={12} sx={{ mt: 3 }}>
+                                <TextField
+                                  fullWidth
+                                  name="difficulty"
+                                  select
+                                  label="Difficulty"
+                                  value={formData.difficulty}
+                                  onChange={handleChange}
+                                  disabled={loading}
+                                >
+                                  {difficulty.map((option) => (
+                                    <MenuItem
+                                      key={option.value}
+                                      value={option.value}
+                                    >
+                                      {option.label}
+                                    </MenuItem>
+                                  ))}
+                                </TextField>
+                              </Grid>
+                            ) : (
+                              ""
+                            )}
+                            <Grid item xs={12} md={12} sx={{ mt: 3 }}>
+                              <FormControlLabel
+                                control={
+                                  <Checkbox
+                                    checked={formData.reference} // Control the checkbox state with formData.reference
+                                    onChange={handleChange} // Use your existing handleChange function
+                                    name="reference" // Ensure name matches the state property (formData.reference)
+                                    disabled={loading}
+                                  />
+                                }
+                                label="Question Reference"
+                              />
+                            </Grid>
+                            {/* ... (long questions fields) */}
+                          </Box>
+                        </CardContent>
+                      </Card>
                     )}
 
-                    <Grid item xs={12} md={12}>
-                      <FormControlLabel
-                        control={
-                          <Checkbox
-                            checked={formData.reference} // Control the checkbox state with formData.reference
-                            onChange={handleChange} // Use your existing handleChange function
-                            name="reference" // Ensure name matches the state property (formData.reference)
-                            disabled={loading}
-                          />
-                        }
-                        label="Question Reference"
-                      />
-                    </Grid>
-
-                    <Grid item xs={12}>
-                      <Button
-                        type="submit"
-                        variant="contained"
-                        fullWidth
-                        sx={{ py: 1.5 }}
-                        disabled={loading}
-                      >
-                        {loading ? <CircularProgress size={24} /> : "Generate"}
-                      </Button>
-                    </Grid>
-                  </>
-                ) : (
-                  ""
-                )}
-
-                <Grid item xs={12} md={12}>
-                  <Typography color="info" className="py-3">
-                    <b>Note:</b> Questions are generated Randomly considering
-                    all topics of equal weightage depending upon the quantity
-                    provided.
-                  </Typography>
-                </Grid>
-                {error && (
-                  <Grid item xs={12}>
-                    <Typography color="error">{error}</Typography>
+                    <Button
+                      type="submit"
+                      variant="contained"
+                      fullWidth
+                      size="large"
+                      sx={{ mt: 3, py: 1.5 }}
+                      disabled={loading}
+                    >
+                      {loading ? (
+                        <CircularProgress size={24} />
+                      ) : (
+                        "Generate Paper"
+                      )}
+                    </Button>
                   </Grid>
-                )}
-              </Grid>
-            </form>
-          </Box>
-        </Grid>
+                </Grid>
+              </form>
+            </Paper>
+          </Grid>
 
-        {/* MCQs Display Section */}
-        <Grid item xs={12} md={6}>
-          <Typography variant="h4" gutterBottom>
-            Generated Paper
-          </Typography>
-          {formData.numberOfMCQs !== 0 &&
-          (formData.numberOfObjective !== 0 ||
-            formData.outputType !== "generation") &&
-          objectiveAlert === false ? (
-            <>
-              {" "}
-              <Typography className="mt-4" variant="h5" gutterBottom>
-                Section A (MCQS)
+          {/* Results Section */}
+          <Grid item xs={12} md={6}>
+            <Paper elevation={3} sx={{ p: 4, borderRadius: 2 }}>
+              <Typography variant="h4" gutterBottom color="primary">
+                Generated Paper
               </Typography>
-              <MCQCards content={contentMcqs} reference={formData.reference} />
-            </>
-          ) : (
-            ""
-          )}
-          {formData.numberOfBlanks !== 0 &&
-          formData.numberOfObjective &&
-          formData.outputType === "generation" &&
-          objectiveAlert === false ? (
-            <>
-              {" "}
-              <Typography className="mt-4" variant="h5" gutterBottom>
-                Section A (Blanks)
-              </Typography>
-              <BlankCards
-                content={contentBlanks}
-                reference={formData.reference}
-              />
-            </>
-          ) : (
-            ""
-          )}
-          {formData.numberOfDescriptive !== 0 &&
-          formData.numberOfShort &&
-          shortAlert === false ? (
-            <>
-              {" "}
-              <Typography className="mt-4" variant="h5" gutterBottom>
-                Section B (Descriptive)
-              </Typography>
-              <QuestionAssistantCard
-                grade={formData.grade}
-                course={formData.course}
-                content={contentDescriptive}
-                questionType="descriptive"
-                reference={formData.reference}
-                generateID={generateID}
-                type="descriptive"
-                method="assistant"
-              />
-            </>
-          ) : (
-            ""
-          )}
-          {formData.numberOfNumericals !== 0 &&
-          formData.numberOfShort &&
-          shortAlert === false ? (
-            <>
-              {" "}
-              <Typography className="mt-4" variant="h5" gutterBottom>
-                Section B (Numericals)
-              </Typography>
-              <QuestionAssistantCard
-                grade={formData.grade}
-                course={formData.course}
-                content={contentNumericals}
-                questionType="numerical"
-                reference={formData.reference}
-                generateID={generateID}
-                type="numerical"
-                method="assistant"
-              />
-            </>
-          ) : (
-            ""
-          )}
-          {formData.numberOfLong !== 0 ? (
-            <>
-              {" "}
-              <Typography className="mt-4" variant="h5" gutterBottom>
-                Section C (Long)
-              </Typography>
-              <QuestionAssistantCard
-                grade={formData.grade}
-                course={formData.course}
-                content={contentLong}
-                questionType="long"
-                reference={formData.reference}
-                generateID={generateID}
-                type="long"
-                method="assistant"
-              />
-            </>
-          ) : (
-            ""
-          )}
-          {contentMcqs.length > 0 ||
-          contentBlanks.length > 0 ||
-          contentDescriptive.length > 0 ||
-          contentNumericals.length > 0 ||
-          contentLong.length > 0 ? (
-            <Grid item xs={12}>
-              <Button
-                type="submit"
-                variant="contained"
-                fullWidth
-                sx={{ py: 1.5 }}
-                disabled={loading}
-                onClick={handleExport}
-              >
-                {loading ? <CircularProgress size={24} /> : "Export"}
-              </Button>
-            </Grid>
-          ) : (
-            ""
-          )}
+
+              {/* MCQs Section */}
+              {contentMcqs.length > 0 && (
+                <Card variant="outlined" sx={{ mb: 3 }}>
+                  <CardContent>
+                    <Typography variant="h5" color="primary" gutterBottom>
+                      Section A (MCQs)
+                    </Typography>
+                    <MCQCards
+                      content={contentMcqs}
+                      reference={formData.reference}
+                    />
+                  </CardContent>
+                </Card>
+              )}
+
+              {contentBlanks.length > 0 && (
+                <Card variant="outlined" sx={{ mb: 3 }}>
+                  <CardContent>
+                    <Typography variant="h5" color="primary" gutterBottom>
+                      Section A (Blanks)
+                    </Typography>
+                    <BlankCards
+                      content={contentBlanks}
+                      reference={formData.reference}
+                    />
+                  </CardContent>
+                </Card>
+              )}
+
+              {contentDescriptive.length > 0 && (
+                <Card variant="outlined" sx={{ mb: 3 }}>
+                  <CardContent>
+                    <Typography variant="h5" color="primary" gutterBottom>
+                      Section B (Descriptive)
+                    </Typography>
+                    <QuestionAssistantCard
+                      grade={formData.grade}
+                      course={formData.course}
+                      content={contentDescriptive}
+                      questionType="descriptive"
+                      reference={formData.reference}
+                      generateID={generateID}
+                      type="descriptive"
+                      method="assistant"
+                    />
+                  </CardContent>
+                </Card>
+              )}
+
+              {contentNumericals.length > 0 && (
+                <Card variant="outlined" sx={{ mb: 3 }}>
+                  <CardContent>
+                    <Typography variant="h5" color="primary" gutterBottom>
+                      Section B (Numericals)
+                    </Typography>
+                    <QuestionAssistantCard
+                      grade={formData.grade}
+                      course={formData.course}
+                      content={contentNumericals}
+                      questionType="numerical"
+                      reference={formData.reference}
+                      generateID={generateID}
+                      type="numerical"
+                      method="assistant"
+                    />
+                  </CardContent>
+                </Card>
+              )}
+
+              {contentLong.length > 0 && (
+                <Card variant="outlined" sx={{ mb: 3 }}>
+                  <CardContent>
+                    <Typography variant="h5" color="primary" gutterBottom>
+                      Section C (Long)
+                    </Typography>
+                    <QuestionAssistantCard
+                      grade={formData.grade}
+                      course={formData.course}
+                      content={contentLong}
+                      questionType="long"
+                      reference={formData.reference}
+                      generateID={generateID}
+                      type="long"
+                      method="assistant"
+                    />
+                  </CardContent>
+                </Card>
+              )}
+              {/* ... (similar Card components for other question types) */}
+
+              {(contentMcqs.length > 0 ||
+                contentBlanks.length > 0 ||
+                contentDescriptive.length > 0 ||
+                contentNumericals.length > 0 ||
+                contentLong.length > 0) && (
+                <Button
+                  variant="contained"
+                  fullWidth
+                  size="large"
+                  sx={{ mt: 3 }}
+                  onClick={handleExport}
+                  disabled={loading}
+                >
+                  Export Paper
+                </Button>
+              )}
+            </Paper>
+          </Grid>
         </Grid>
-      </Grid>
+      </Container>
     </Box>
   );
 }

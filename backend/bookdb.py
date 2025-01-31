@@ -43,19 +43,19 @@ def MCQS(grade,course,quantity,chapters):
     random.shuffle(mcqs_data)
     return json.dumps(mcqs_data, indent=4), len(mcqs_data)
 #question function to fetch descriptive questions data from book
-def fetch_unit_questions(grade,course,quantity, topics, questionType):
-    questionPerTopic = math.ceil(quantity/len(topics))
+def fetch_unit_questions(grade,course,quantity,section, chapter, questionType):
+    questionPerTopic = math.ceil(quantity/len(chapter))
     unitQuestion_Data = []
-    for topic in topics:    
+    for chap in chapter:    
         query = {
             "grade":grade,
             "course":course,
-            "Topic":  topic,
+            "Chapter":chap,
+            "Section":section,
             "Numerical": questionType
         }
         projection = {
             "Question": 1,
-            "Topic" : 1,
             "Chapter" : 1,
             "_id": 0
         }
@@ -66,7 +66,7 @@ def fetch_unit_questions(grade,course,quantity, topics, questionType):
             unitQuestion_Data.append(
                 {
                     "question": result["Question"],
-                    "reference": f"Topic : {result['Topic']},Chapter : {result['Chapter']}"
+                    "reference": f"Chapter : {result['Chapter']}"
                 }
             )
     unitQuestion_Data = unitQuestion_Data[:quantity]

@@ -74,8 +74,8 @@ function Quiz() {
 
     const link =
       formData.type === "mcqs"
-        ? "http://127.0.0.1:8000/api/mcqs"
-        : "http://127.0.0.1:8000/api/blanks";
+        ? "https://ai.myedbox.com/api/mcqs"
+        : "https://ai.myedbox.com/api/blanks";
 
     await handleApiRequest({
       link,

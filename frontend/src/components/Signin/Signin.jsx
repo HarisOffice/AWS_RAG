@@ -13,7 +13,7 @@ const signIn = async (provider, formData) => {
 
   try {
     // Make a POST request to your FastAPI backend
-    const response = await fetch('http://127.0.0.1:8000/api/signin', {
+    const response = await fetch('https://ai.myedbox.com/api/signin', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

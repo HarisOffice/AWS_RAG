@@ -16,7 +16,8 @@ export const outputType = [
 
 export const grades = [{ value: "9", label: "9th" }];
 export const courses = [{ value: "Physics", label: "Physics" },
-  { value: "Mathematics", label: "Mathematics" }
+  { value: "Mathematics", label: "Mathematics" },
+  { value: "Chemistry", label: "Chemistry" }
 ];
 
 export const questionsType = [

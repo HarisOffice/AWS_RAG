@@ -252,7 +252,8 @@ class QueryRequestEndQuestion(BaseModel):
     grade: int
     course: str
     quantity:int
-    topic:list[str]
+    section:str
+    chapter:list[str]
     questionType:int
 
 class QueryRequestPaperMcqs(BaseModel):
@@ -422,7 +423,7 @@ def get_book_mcqs(request: QueryRequestMCQDb, result_holder: dict):
         
 def get_book_questions(request: QueryRequestEndQuestion, result_holder: dict):
     try:
-        response, _ = bookdb.fetch_unit_questions(request.grade,request.course,request.quantity, request.topic, request.questionType)
+        response, _ = bookdb.fetch_unit_questions(request.grade,request.course,request.quantity,request.section, request.chapter, request.questionType)
         result_holder["data"] = response
     except Exception as e:
         result_holder["error"] = str(e)
@@ -1205,8 +1206,8 @@ if __name__ == "__main__":
         host="0.0.0.0",       
         port=8000,            
         timeout_keep_alive=300,  
-        reload=True
-        # workers=4      
+        # reload=True
+        workers=4      
     )
 
                 

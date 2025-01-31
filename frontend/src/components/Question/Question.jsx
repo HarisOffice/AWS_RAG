@@ -75,13 +75,13 @@ export default function Question() {
     let type;
 
     if (formData.type === "Short" && formData.method === "book") {
-      link = "http://127.0.0.1:8000/api/short";
+      link = "https://ai.myedbox.com/api/short";
     } else if (formData.type === "Long" && formData.method === "book") {
-      link = "http://127.0.0.1:8000/api/long";
+      link = "https://ai.myedbox.com/api/long";
     } else if (formData.type === "Numerical" && formData.method === "book") {
-      link = "http://127.0.0.1:8000/api/numerical";
+      link = "https://ai.myedbox.com/api/numerical";
     } else {
-      link = "http://127.0.0.1:8000/api/paper";
+      link = "https://ai.myedbox.com/api/paper";
     }
 
     if (formData.type === "Short") {

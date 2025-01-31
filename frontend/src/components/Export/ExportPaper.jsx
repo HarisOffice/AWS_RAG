@@ -23,6 +23,12 @@ import {
   IconButton,
   Input,
 } from "@mui/material";
+
+import {
+  grades,
+  courses,
+} from "../../utils/formData";
+
 import { Close as CloseIcon } from "@mui/icons-material";
 import {MathJax} from "better-react-mathjax";
 const SelectField = ({ label, name, value, options, onChange }) => (
@@ -38,15 +44,6 @@ const SelectField = ({ label, name, value, options, onChange }) => (
   </FormControl>
 );
 
-// Placeholder data for the select inputs (replace with actual data)
-const grades = [
-  { value: "9", label: "Grade 9" },
-  { value: "10", label: "Grade 10" },
-];
-const courses = [
-  { value: "Physics", label: "Physics" },
-  { value: "Mathematics", label: "Mathematics" },
-];
 
 export default function ExportPaper() {
   const user = JSON.parse(localStorage.getItem("user"));
@@ -104,7 +101,7 @@ export default function ExportPaper() {
         course: formData.course,
       });
       const response = await fetch(
-        `http://127.0.0.1:8000/api/history?${queryParams.toString()}`
+        `https://ai.myedbox.com/api/history?${queryParams.toString()}`
       );
 
       const data = await response.json();

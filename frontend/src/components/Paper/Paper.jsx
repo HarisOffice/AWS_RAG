@@ -78,9 +78,9 @@ export default function Paper() {
       quantityNumericals: formData.numberOfNumericals,
     };
 
-    const linkA = "http://127.0.0.1:8000/api/paperA";
-    const linkB = "http://127.0.0.1:8000/api/paperB";
-    const linkC = "http://127.0.0.1:8000/api/paperC";
+    const linkA = "https://ai.myedbox.com/api/paperA";
+    const linkB = "https://ai.myedbox.com/api/paperB";
+    const linkC = "https://ai.myedbox.com/api/paperC";
 
     await handleApiRequest({
       link: linkA,

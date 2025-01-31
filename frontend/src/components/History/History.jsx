@@ -96,7 +96,7 @@ export default function History() {
         method: filters.type,
       });
       const response = await fetch(
-        `http://127.0.0.1:8000/api/history?${queryParams.toString()}`
+        `https://ai.myedbox.com/api/history?${queryParams.toString()}`
       );
       const data = await response.json();
       setHistoryData(data.questions || []);
