@@ -52,7 +52,7 @@ app.add_middleware(
 
 client = MongoClient(DATABASE_URI)
 db = client["Board"]  # For storing users, history, and API data
-books = db['Books']
+books = db['Sample']
 
 # class TimeoutMiddleware(BaseHTTPMiddleware):
 #     async def dispatch(self, request: Request, call_next):
@@ -534,7 +534,7 @@ async def mcqs_book(request: QueryRequest):
        C) [Option C]
        D) [Option D]
        Correct Answer: [Correct Option Text]
-    5. Do not include raw equations in formats like "9.81 m/s^2". Instead, please ensure that equations are properly formatted (e.g., gravitational acceleration: 9.81 m/s²).
+    Give answer in a proper language.
     
     If you do not find the information from the book then do not answer!
     Please ensure the output matches this structure exactly. Do not include extra text or information.
@@ -646,250 +646,250 @@ async def topics_db(request: QueryRequestT):
 
 
 
-# API endpoint for generating long questions using threading
-@app.post("/api/long", response_model=QueryResponse)
-async def long_book(request: QueryRequestQ):
-    query = f"""
-    Using the provided {request.grade} {request.course} book, generate a total of {request.quantity} {request.difficulty} level long questions related to the chapter '{request.chapter}' from the book. The questions should meet the following criteria:
+# # API endpoint for generating long questions using threading
+# @app.post("/api/long", response_model=QueryResponse)
+# async def long_book(request: QueryRequestQ):
+#     query = f"""
+#     Using the provided {request.grade} {request.course} book, generate a total of {request.quantity} {request.difficulty} level long questions related to the chapter '{request.chapter}' from the book. The questions should meet the following criteria:
 
-    1. The questions must be clear, concise, and aligned with the topic content from the provided book.
-    2. The questions should be suitable for a Class {request.grade} understanding level.
-    3. Each question should follow one of these patterns:
-       '1. What is kinematics? Derive the equation \(2aS = v_f^2 - v_i^2\).'
-       '2. Define equilibrium. Explain its types and two conditions.'
-       '3. State and explain Boyle's Law. Write its one application.' 
-       '4. Define Thermal expansion. Derive \(\Delta L = lpha L \Delta T\).'
-       '5. Describe the construction and working of hydraulic machine with the help of diagram.'
+#     1. The questions must be clear, concise, and aligned with the topic content from the provided book.
+#     2. The questions should be suitable for a Class {request.grade} understanding level.
+#     3. Each question should follow one of these patterns:
+#        '1. What is kinematics? Derive the equation \(2aS = v_f^2 - v_i^2\).'
+#        '2. Define equilibrium. Explain its types and two conditions.'
+#        '3. State and explain Boyle's Law. Write its one application.' 
+#        '4. Define Thermal expansion. Derive \(\Delta L = lpha L \Delta T\).'
+#        '5. Describe the construction and working of hydraulic machine with the help of diagram.'
        
-    4. Each question should follow the format:
-       '5. [Question Text]'
-    5. Do not include raw equations in formats like "9.81 m/s^2". Instead, please ensure that equations are properly formatted (e.g., gravitational acceleration: 9.81 m/s²).
+#     4. Each question should follow the format:
+#        '5. [Question Text]'
+#     5. Do not include raw equations in formats like "9.81 m/s^2". Instead, please ensure that equations are properly formatted (e.g., gravitational acceleration: 9.81 m/s²).
     
-    If you donot find the information from the book then donot answer!
-    Please ensure the output matches this structure exactly. Do not include extra text or information.
-    """
+#     If you donot find the information from the book then donot answer!
+#     Please ensure the output matches this structure exactly. Do not include extra text or information.
+#     """
 
-    result_holder = {}
+#     result_holder = {}
 
-    # Start the task in a separate thread
-    thread = threading.Thread(target=generate_questions, args=(query, result_holder,request))
-    thread.start()
-    thread.join()  # Wait for the thread to finish
+#     # Start the task in a separate thread
+#     thread = threading.Thread(target=generate_questions, args=(query, result_holder,request))
+#     thread.start()
+#     thread.join()  # Wait for the thread to finish
 
-    # Handle result or error from the background thread
-    if "error" in result_holder:
-        raise HTTPException(status_code=500, detail=f"Error generating response: {result_holder['error']}")
+#     # Handle result or error from the background thread
+#     if "error" in result_holder:
+#         raise HTTPException(status_code=500, detail=f"Error generating response: {result_holder['error']}")
     
-    return QueryResponse(query=query, response=result_holder["data"])
+#     return QueryResponse(query=query, response=result_holder["data"])
 
-# API endpoint for generating short questions using threading
-@app.post("/api/short", response_model=QueryResponse)
-async def short_book(request: QueryRequestQ):
-    query = f"""
-    Using the provided {request.grade} {request.course} book, generate a total of {request.quantity} short questions related to the chapter '{request.chapter}' from the book. The questions should meet the following criteria:
-    1. The questions must be clear, concise, and aligned with the topic content from the provided book.
-    2. The questions should be suitable for a Class {request.grade} understanding level.
-    3. Each question should follow one of these patterns:
-       '1. Define fundamental and derived quantities. Also write three examples of each.'
-       '2. State Newton’s Second Law of Motion and derive its equation.'
-       '3. Write down three differences between Boiling Point and Evaporation.'
-       '4. What is potential energy? Derive P.E = mgh.'
-       '5. What do you mean by elasticity? State Hooke’s Law and write its mathematical expression.'
-    4. Each question should follow the format:
-       '5. [Question Text]'
-    5. Do not include raw equations in formats like "9.81 m/s^2". Instead, please ensure that equations are properly formatted (e.g., gravitational acceleration: 9.81 m/s²).
+# # API endpoint for generating short questions using threading
+# @app.post("/api/short", response_model=QueryResponse)
+# async def short_book(request: QueryRequestQ):
+#     query = f"""
+#     Using the provided {request.grade} {request.course} book, generate a total of {request.quantity} short questions related to the chapter '{request.chapter}' from the book. The questions should meet the following criteria:
+#     1. The questions must be clear, concise, and aligned with the topic content from the provided book.
+#     2. The questions should be suitable for a Class {request.grade} understanding level.
+#     3. Each question should follow one of these patterns:
+#        '1. Define fundamental and derived quantities. Also write three examples of each.'
+#        '2. State Newton’s Second Law of Motion and derive its equation.'
+#        '3. Write down three differences between Boiling Point and Evaporation.'
+#        '4. What is potential energy? Derive P.E = mgh.'
+#        '5. What do you mean by elasticity? State Hooke’s Law and write its mathematical expression.'
+#     4. Each question should follow the format:
+#        '5. [Question Text]'
+#     5. Do not include raw equations in formats like "9.81 m/s^2". Instead, please ensure that equations are properly formatted (e.g., gravitational acceleration: 9.81 m/s²).
     
-    If you do not find the information from the book then do not answer!
-    Please ensure the output matches this structure exactly. Do not include extra text or information.
-    """
+#     If you do not find the information from the book then do not answer!
+#     Please ensure the output matches this structure exactly. Do not include extra text or information.
+#     """
 
-    result_holder = {}
+#     result_holder = {}
 
-    # Start the task in a separate thread
-    thread = threading.Thread(target=generate_questions, args=(query, result_holder,request))
-    thread.start()
-    thread.join()  # Wait for the thread to finish
+#     # Start the task in a separate thread
+#     thread = threading.Thread(target=generate_questions, args=(query, result_holder,request))
+#     thread.start()
+#     thread.join()  # Wait for the thread to finish
 
-    # Handle result or error from the background thread
-    if "error" in result_holder:
-        raise HTTPException(status_code=500, detail=f"Error generating response: {result_holder['error']}")
+#     # Handle result or error from the background thread
+#     if "error" in result_holder:
+#         raise HTTPException(status_code=500, detail=f"Error generating response: {result_holder['error']}")
 
-    return QueryResponse(query=query, response=result_holder["data"])
+#     return QueryResponse(query=query, response=result_holder["data"])
     
-@app.post("/api/numerical", response_model=QueryResponse)
-async def numerical_book(request: QueryRequestQ):
-    query = f"""
-    Using the provided {request.grade} {request.course} book, generate a total of {request.quantity} numerical questions related to the chapter '{request.chapter}' from the book. The questions should meet the following criteria:
+# @app.post("/api/numerical", response_model=QueryResponse)
+# async def numerical_book(request: QueryRequestQ):
+#     query = f"""
+#     Using the provided {request.grade} {request.course} book, generate a total of {request.quantity} numerical questions related to the chapter '{request.chapter}' from the book. The questions should meet the following criteria:
 
-    1. The questions must be clear, concise, and aligned with the topic content from the provided book.
-    2. The questions should be suitable for a Class {request.grade} understanding level.
-    3. Each question should follow one of these patterns:
-       '1. If the weight of Amna is 200N at the surface of the earth, find the mass of Amna.'
-       '2. A bus is moving on a road with 15 m/s and accelerates at 5 m/s². Find the final velocity of the bus after 6 seconds.'
-       '3. A cylinder contains 60 cm³ of air at a pressure of 140 kPa. What will its volume be if the pressure on it is increased to 200 kPa?' 
-       '4. A ball is dropped from the top of the height of 70m. How much time, the ball will take to strike the ground? (g = 10ms^-2)'
-       '5. A mechanic uses a double arm spanner to turn a nut. He applies a force of 15N at each end of the spanner and produces a torque of 60Nm. What is the length of the moment arm of the couple?'
+#     1. The questions must be clear, concise, and aligned with the topic content from the provided book.
+#     2. The questions should be suitable for a Class {request.grade} understanding level.
+#     3. Each question should follow one of these patterns:
+#        '1. If the weight of Amna is 200N at the surface of the earth, find the mass of Amna.'
+#        '2. A bus is moving on a road with 15 m/s and accelerates at 5 m/s². Find the final velocity of the bus after 6 seconds.'
+#        '3. A cylinder contains 60 cm³ of air at a pressure of 140 kPa. What will its volume be if the pressure on it is increased to 200 kPa?' 
+#        '4. A ball is dropped from the top of the height of 70m. How much time, the ball will take to strike the ground? (g = 10ms^-2)'
+#        '5. A mechanic uses a double arm spanner to turn a nut. He applies a force of 15N at each end of the spanner and produces a torque of 60Nm. What is the length of the moment arm of the couple?'
        
-    4. Each question should follow the format:
-       '5. [Question Text]'
-    5. Do not include raw equations in formats like "9.81 m/s^2". Instead, please ensure that equations are properly formatted (e.g., gravitational acceleration: 9.81 m/s²).
+#     4. Each question should follow the format:
+#        '5. [Question Text]'
+#     5. Do not include raw equations in formats like "9.81 m/s^2". Instead, please ensure that equations are properly formatted (e.g., gravitational acceleration: 9.81 m/s²).
     
-    If you do not find the information from the book then do not answer!
-    Please ensure the output matches this structure exactly. Do not include extra text or information.
-    """
+#     If you do not find the information from the book then do not answer!
+#     Please ensure the output matches this structure exactly. Do not include extra text or information.
+#     """
 
-    result_holder = {}
+#     result_holder = {}
 
-    # Start the task in a separate thread
-    thread = threading.Thread(target=generate_questions, args=(query, result_holder,request))
-    thread.start()
-    thread.join()  # Wait for the thread to finish
+#     # Start the task in a separate thread
+#     thread = threading.Thread(target=generate_questions, args=(query, result_holder,request))
+#     thread.start()
+#     thread.join()  # Wait for the thread to finish
 
-    # Handle result or error from the background thread
-    if "error" in result_holder:
-        raise HTTPException(status_code=500, detail=f"Error generating response: {result_holder['error']}")
+#     # Handle result or error from the background thread
+#     if "error" in result_holder:
+#         raise HTTPException(status_code=500, detail=f"Error generating response: {result_holder['error']}")
     
-    return QueryResponse(query=query, response=result_holder["data"])
+#     return QueryResponse(query=query, response=result_holder["data"])
 
-@app.post("/api/paperA", response_model=QueryResponse)
-async def paper_a(request: QueryRequestP):
-    query = f"""
-   Using the provided {request.grade} {request.course} book, generate a total of 12 multiple-choice questions (MCQs) of {request.difficulty} level from these chapters, considering their weight for generation out of 100:
-    [
-    "Physical Quantities And Measurement": 11.90,
-    "Kinematics": 11.90,
-    "Dynamics": 11.90,
-    "Turning Effect Of Forces": 11.90,
-    "Forces And Matter": 10.19,
-    "Gravitation": 08.22,
-    "Properties Of Matter": 10.19,
-    "Energy Sources And Transfer Of Energy": 11.90,
-    "Thermal Properties Of Matter": 11.90
-    ]
-    The questions should meet the following criteria:
-    1. Each question must have 4 options, with one correct answer.
-    2. The questions must be clear, concise, and aligned with the topic content from the provided book and past papers.
-    3. The questions should be suitable for a Class {request.grade} understanding level.
-    4. Each question should follow the format:
-    '5. [Question Text]'
-    A) [Option A]
-    B) [Option B]
-    C) [Option C]
-    D) [Option D]
-    Correct Answer: [Correct Option Text]
+# @app.post("/api/paperA", response_model=QueryResponse)
+# async def paper_a(request: QueryRequestP):
+#     query = f"""
+#    Using the provided {request.grade} {request.course} book, generate a total of 12 multiple-choice questions (MCQs) of {request.difficulty} level from these chapters, considering their weight for generation out of 100:
+#     [
+#     "Physical Quantities And Measurement": 11.90,
+#     "Kinematics": 11.90,
+#     "Dynamics": 11.90,
+#     "Turning Effect Of Forces": 11.90,
+#     "Forces And Matter": 10.19,
+#     "Gravitation": 08.22,
+#     "Properties Of Matter": 10.19,
+#     "Energy Sources And Transfer Of Energy": 11.90,
+#     "Thermal Properties Of Matter": 11.90
+#     ]
+#     The questions should meet the following criteria:
+#     1. Each question must have 4 options, with one correct answer.
+#     2. The questions must be clear, concise, and aligned with the topic content from the provided book and past papers.
+#     3. The questions should be suitable for a Class {request.grade} understanding level.
+#     4. Each question should follow the format:
+#     '5. [Question Text]'
+#     A) [Option A]
+#     B) [Option B]
+#     C) [Option C]
+#     D) [Option D]
+#     Correct Answer: [Correct Option Text]
     
-    5. Do not include raw equations in formats like "9.81 m/s^2". Instead, please ensure that equations are properly formatted (e.g., gravitational acceleration: 9.81 m/s²).
+#     5. Do not include raw equations in formats like "9.81 m/s^2". Instead, please ensure that equations are properly formatted (e.g., gravitational acceleration: 9.81 m/s²).
     
-    If you do not find the information from the book, do not answer. Please ensure the output matches this structure exactly. Do not include extra text or information.
-    """
+#     If you do not find the information from the book, do not answer. Please ensure the output matches this structure exactly. Do not include extra text or information.
+#     """
 
-    result_holder = {}
+#     result_holder = {}
 
-    # Start the background task to generate MCQs
-    thread = threading.Thread(target=generate_mcqs, args=(query, result_holder,request))
-    thread.start()
-    thread.join()  # Wait for the thread to finish
+#     # Start the background task to generate MCQs
+#     thread = threading.Thread(target=generate_mcqs, args=(query, result_holder,request))
+#     thread.start()
+#     thread.join()  # Wait for the thread to finish
 
-    # Handle result or error from the background thread
-    if "error" in result_holder:
-        raise HTTPException(status_code=500, detail=result_holder["error"])
+#     # Handle result or error from the background thread
+#     if "error" in result_holder:
+#         raise HTTPException(status_code=500, detail=result_holder["error"])
 
-    return QueryResponse(query=query, response=result_holder["data"])
+#     return QueryResponse(query=query, response=result_holder["data"])
 
-@app.post("/api/paperB", response_model=QueryResponse)
-async def paper_b(request: QueryRequestP):
-    query = f""" 
-       Using the provided {request.grade} {request.course} book, generate a total of 10 short questions of {request.difficulty} level from these chapters, considering their weight for generation out of 100:
-    [
-    "Physical Quantities And Measurement": 13.16,
-    "Kinematics": 13.16,
-    "Dynamics": 13.16,
-    "Turning Effect Of Forces": 13.16,
-    "Forces And Matter": 10.53,
-    "Gravitation": 8.89,
-    "Properties Of Matter": 6.26,
-    "Energy Sources And Transfer Of Energy": 8.52,
-    "Thermal Properties Of Matter": 13.16
-    ]
-    Out of 10 questions to be generated, {request.quantityNumericals} of them should be numericals.
-    The questions should meet the following criteria:
-    1. The questions must be clear, concise, and aligned with the topic content from the provided book.
-    2. The questions should be suitable for a Class {request.grade} understanding level.
-    3. Each question should follow one of these patterns:
-       '1. Define fundamental and derived quantities. Also write three examples of each.'
-       '2. State Newton’s Second Law of Motion and derive its equation.'
-       '3. Write down three differences between Boiling Point and Evaporation.' 
-       '4. What is potential energy? Derive P.E = mgh.'
-       '5. What do you mean by elasticity? State Hooke’s Law and write its mathematical expression.'
+# @app.post("/api/paperB", response_model=QueryResponse)
+# async def paper_b(request: QueryRequestP):
+#     query = f""" 
+#        Using the provided {request.grade} {request.course} book, generate a total of 10 short questions of {request.difficulty} level from these chapters, considering their weight for generation out of 100:
+#     [
+#     "Physical Quantities And Measurement": 13.16,
+#     "Kinematics": 13.16,
+#     "Dynamics": 13.16,
+#     "Turning Effect Of Forces": 13.16,
+#     "Forces And Matter": 10.53,
+#     "Gravitation": 8.89,
+#     "Properties Of Matter": 6.26,
+#     "Energy Sources And Transfer Of Energy": 8.52,
+#     "Thermal Properties Of Matter": 13.16
+#     ]
+#     Out of 10 questions to be generated, {request.quantityNumericals} of them should be numericals.
+#     The questions should meet the following criteria:
+#     1. The questions must be clear, concise, and aligned with the topic content from the provided book.
+#     2. The questions should be suitable for a Class {request.grade} understanding level.
+#     3. Each question should follow one of these patterns:
+#        '1. Define fundamental and derived quantities. Also write three examples of each.'
+#        '2. State Newton’s Second Law of Motion and derive its equation.'
+#        '3. Write down three differences between Boiling Point and Evaporation.' 
+#        '4. What is potential energy? Derive P.E = mgh.'
+#        '5. What do you mean by elasticity? State Hooke’s Law and write its mathematical expression.'
        
-    4. Each question should follow the format:
-       '5. [Question Text]'
+#     4. Each question should follow the format:
+#        '5. [Question Text]'
 
-    5. Do not include raw equations in formats like "9.81 m/s^2". Instead, please ensure that equations are properly formatted (e.g., gravitational acceleration: 9.81 m/s²).
+#     5. Do not include raw equations in formats like "9.81 m/s^2". Instead, please ensure that equations are properly formatted (e.g., gravitational acceleration: 9.81 m/s²).
     
-    If you do not find the information from the book then do not answer!
-    Please ensure the output matches this structure exactly. Do not include extra text or information.
-    """
+#     If you do not find the information from the book then do not answer!
+#     Please ensure the output matches this structure exactly. Do not include extra text or information.
+#     """
 
-    result_holder = {}
+#     result_holder = {}
 
-    # Start the background task to generate short questions
-    thread = threading.Thread(target=generate_questions, args=(query, result_holder,request))
-    thread.start()
-    thread.join()  # Wait for the thread to finish
+#     # Start the background task to generate short questions
+#     thread = threading.Thread(target=generate_questions, args=(query, result_holder,request))
+#     thread.start()
+#     thread.join()  # Wait for the thread to finish
 
-    # Handle result or error from the background thread
-    if "error" in result_holder:
-        raise HTTPException(status_code=500, detail=result_holder["error"])
+#     # Handle result or error from the background thread
+#     if "error" in result_holder:
+#         raise HTTPException(status_code=500, detail=result_holder["error"])
 
-    return QueryResponse(query=query, response=result_holder["data"])
+#     return QueryResponse(query=query, response=result_holder["data"])
 
-@app.post("/api/paperC", response_model=QueryResponse)
-async def paper_c(request: QueryRequestP):
-    query = f""" 
-       Using the provided {request.grade} {request.course} book, generate a total of 6 long questions of {request.difficulty} level from these chapters, considering their weight for generation out of 100:
-    [
-    "Physical Quantities And Measurement": 0,
-    "Kinematics": 19.05,
-    "Dynamics": 4.76,
-    "Turning Effect Of Forces": 9.52,
-    "Forces And Matter": 9.52,
-    "Gravitation": 4.76,
-    "Properties Of Matter": 14.29,
-    "Energy Sources And Transfer Of Energy": 19.05,
-    "Thermal Properties Of Matter": 19.05
-    ]
-    The questions should meet the following criteria:
-    1. The questions must be clear, concise, and aligned with the topic content from the provided book.
-    2. The questions should be suitable for a Class {request.grade} understanding level.
-    3. Each question should follow one of these patterns:
-       '1. What is kinematics? Derive the equation \(2aS = v_f^2 - v_i^2\).'
-       '2. Define equilibrium. Explain its types and two conditions.'
-       '3. State and explain Boyle's Law. Write its one application.' 
-       '4. Define Thermal expansion. Derive \(\Delta L = \alpha L \Delta T\).'
-       '5. Describe the construction and working of hydraulic machine with the help of diagram.'
+# @app.post("/api/paperC", response_model=QueryResponse)
+# async def paper_c(request: QueryRequestP):
+#     query = f""" 
+#        Using the provided {request.grade} {request.course} book, generate a total of 6 long questions of {request.difficulty} level from these chapters, considering their weight for generation out of 100:
+#     [
+#     "Physical Quantities And Measurement": 0,
+#     "Kinematics": 19.05,
+#     "Dynamics": 4.76,
+#     "Turning Effect Of Forces": 9.52,
+#     "Forces And Matter": 9.52,
+#     "Gravitation": 4.76,
+#     "Properties Of Matter": 14.29,
+#     "Energy Sources And Transfer Of Energy": 19.05,
+#     "Thermal Properties Of Matter": 19.05
+#     ]
+#     The questions should meet the following criteria:
+#     1. The questions must be clear, concise, and aligned with the topic content from the provided book.
+#     2. The questions should be suitable for a Class {request.grade} understanding level.
+#     3. Each question should follow one of these patterns:
+#        '1. What is kinematics? Derive the equation \(2aS = v_f^2 - v_i^2\).'
+#        '2. Define equilibrium. Explain its types and two conditions.'
+#        '3. State and explain Boyle's Law. Write its one application.' 
+#        '4. Define Thermal expansion. Derive \(\Delta L = \alpha L \Delta T\).'
+#        '5. Describe the construction and working of hydraulic machine with the help of diagram.'
        
-    4. Each question should follow the format:
-       '5. [Question Text]'
+#     4. Each question should follow the format:
+#        '5. [Question Text]'
 
-    5. Do not include raw equations in formats like "9.81 m/s^2". Instead, please ensure that equations are properly formatted (e.g., gravitational acceleration: 9.81 m/s²).
+#     5. Do not include raw equations in formats like "9.81 m/s^2". Instead, please ensure that equations are properly formatted (e.g., gravitational acceleration: 9.81 m/s²).
     
-    If you do not find the information from the book, do not answer!
-    Please ensure the output matches this structure exactly. Do not include extra text or information.
-    """
+#     If you do not find the information from the book, do not answer!
+#     Please ensure the output matches this structure exactly. Do not include extra text or information.
+#     """
 
-    result_holder = {}
+#     result_holder = {}
 
-    # Start the background task to generate long questions
-    thread = threading.Thread(target=generate_questions, args=(query, result_holder,request))
-    thread.start()
-    thread.join()  # Wait for the thread to finish
+#     # Start the background task to generate long questions
+#     thread = threading.Thread(target=generate_questions, args=(query, result_holder,request))
+#     thread.start()
+#     thread.join()  # Wait for the thread to finish
 
-    # Handle result or error from the background thread
-    if "error" in result_holder:
-        raise HTTPException(status_code=500, detail=result_holder["error"])
+#     # Handle result or error from the background thread
+#     if "error" in result_holder:
+#         raise HTTPException(status_code=500, detail=result_holder["error"])
 
-    return QueryResponse(query=query, response=result_holder["data"])
+#     return QueryResponse(query=query, response=result_holder["data"])
 
 @app.post("/api/objective/mcqs", response_model=QueryResponse)
 async def mcqs_book(request: QueryRequestPaper):
@@ -1206,8 +1206,8 @@ if __name__ == "__main__":
         host="0.0.0.0",       
         port=8000,            
         timeout_keep_alive=300,  
-        # reload=True
-        workers=4      
+        reload=True
+        # workers=4      
     )
 
                 

@@ -25,28 +25,28 @@ export default function Header() {
 
   useEffect(() => {
     switch (location.pathname) {
-      case "/mcqs-blanks":
-      case "/quiz":
+      // case "/mcqs-blanks":
+      // case "/quiz":
+      //   setValue(1);
+      //   break;
+      // case "/long-short-questions":
+      // case "/question":
+      //   setValue(2);
+      //   break;
+      // case "/paper":
+      //   setValue(3);
+      //   break;
+      // case "/analytics":
+      //   setValue(4);
+      //   break;
+      case "/assistant":
         setValue(1);
         break;
-      case "/long-short-questions":
-      case "/question":
+      case "/history":
         setValue(2);
         break;
-      case "/paper":
-        setValue(3);
-        break;
-      case "/analytics":
-        setValue(4);
-        break;
-      case "/assistant":
-        setValue(5);
-        break;
-      case "/history":
-        setValue(6);
-        break;
       case "/export":
-        setValue(7);
+        setValue(3);
         break;
       default:
         setValue(0);
@@ -59,10 +59,10 @@ export default function Header() {
 
   const menuItems = [
     { label: "Home", path: "/" },
-    { label: "MCQs/Blanks", path: "/quiz" },
-    { label: "Long & Short Questions", path: "/question" },
-    { label: "Paper Generation", path: "/paper" },
-    { label: "Analytics", path: "/analytics" },
+    // { label: "MCQs/Blanks", path: "/quiz" },
+    // { label: "Long & Short Questions", path: "/question" },
+    // { label: "Paper Generation", path: "/paper" },
+    // { label: "Analytics", path: "/analytics" },
     { label: "Assistant", path: "/assistant" },
     { label: "History", path: "/history" },
     { label: "Export", path: "/export" },

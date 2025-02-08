@@ -1,1 +1,79 @@
-[\n    {\n        \"key\": \"2 m\",\n        \"solution\": \" The torque produced by a couple is given by the formula: Torque = Force x Distance. Since the mechanic applies a force of 15N at each end of the spanner, the total force applied is 15N + 15N = 30N. However, for a couple, the forces are equal and opposite, so we consider the force applied at one end. Given that the torque produced is 60Nm, we can use the formula: 60 Nm = 15N x Distance. To find the length of the moment arm of the couple, we can rearrange the formula to solve for Distance: Distance = Torque / Force = 60 Nm / 15 N = 4 Nm / N = 4 m. However, the distance here is the total length of the couple, which is twice the length of the moment arm. So, the length of the moment arm of the couple is 4 m / 2 = 2 m.\"\n    }\n]
+[
+    {
+        "question": "5. \u0635\u0628\u0627 \u0646\u06d2 \u06a9\u0648\u06c1 \u0648 \u062f\u0634\u062a \u0627\u0648\u0631 \u0635\u062d\u0631\u0627 \u0645\u06cc\u06ba \u06a9\u06cc\u0627 \u0646\u0648\u06cc\u062f \u0633\u0646\u0627\u0626\u06cc\u061f",
+        "options": [
+            "\u0628\u0627\u0631\u0634 \u06a9\u06cc",
+            "\u06af\u0631\u0645\u06cc \u06a9\u06cc",
+            "\u0633\u0631\u0645\u0627 \u06a9\u06cc",
+            "\u062e\u0632\u0627\u06ba \u06a9\u06cc"
+        ],
+        "correct_answer": "A) \u0628\u0627\u0631\u0634 \u06a9\u06cc",
+        "reference": ""
+    },
+    {
+        "question": "5. \u0627\u0633 \u0646\u0638\u0645 \u06a9\u06d2 \u0686\u0648\u062a\u06be\u06d2 \u0628\u0646\u062f \u0645\u06cc\u06ba \u06a9\u06cc\u0627 \u0645\u0646\u0638\u0631 \u062f\u06a9\u06be\u0627\u06cc\u0627 \u06af\u06cc\u0627 \u06c1\u06d2\u061f",
+        "options": [
+            "\u0628\u0631\u0633\u0627\u062a \u06a9\u0627",
+            "\u06af\u0631\u0645\u06cc \u06a9\u0627",
+            "\u0633\u0631\u0645\u0627 \u06a9\u0627",
+            "\u062e\u0632\u0627\u06ba \u06a9\u0627"
+        ],
+        "correct_answer": "A) \u0628\u0631\u0633\u0627\u062a \u06a9\u0627",
+        "reference": ""
+    },
+    {
+        "question": "5. \u06a9\u0627\u0644\u06cc \u06af\u06be\u0679\u0627 \u0645\u06cc\u06ba \u0627\u064f\u0691 \u0631\u06c1\u06cc \u062a\u06be\u06cc\u06ba:",
+        "options": [
+            "\u06a9\u0648\u0626\u0644\u0648\u06ba",
+            "\u0628\u06af\u0644\u0648\u06ba",
+            "\u0628\u062c\u0644\u06cc\u0648\u06ba",
+            "\u06a9\u0648\u06a9\u0644\u0648\u06ba"
+        ],
+        "correct_answer": "B) \u0628\u06af\u0644\u0648\u06ba",
+        "reference": ""
+    },
+    {
+        "question": "5. \u0628\u0631\u0633\u0627\u062a \u0633\u06d2 \u0644\u0637\u0641 \u0627\u064f\u0679\u06be\u0627 \u0631\u06c1\u06d2 \u062a\u06be\u06d2:",
+        "options": [
+            "\u06c1\u0627\u062a\u06be\u06cc",
+            "\u0645\u0648\u0631",
+            "\u06af\u0648\u06cc\u0644",
+            "\u0628\u06af\u0644\u06d2"
+        ],
+        "correct_answer": "B) \u0645\u0648\u0631",
+        "reference": ""
+    },
+    {
+        "question": "5. \u0635\u0628\u0627 \u0633\u06d2 \u06c1\u0648\u0627 \u0645\u0631\u0627\u062f \u06c1\u06d2:",
+        "options": [
+            "\u0633\u0645\u0646\u062f\u0631 \u06a9\u06cc",
+            "\u0628\u0627\u063a \u06a9\u06cc",
+            "\u0635\u062d\u0631\u0627 \u06a9\u06cc",
+            "\u0631\u06cc\u06af\u0633\u062a\u0627\u0646 \u06a9\u06cc"
+        ],
+        "correct_answer": "A) \u0633\u0645\u0646\u062f\u0631 \u06a9\u06cc",
+        "reference": ""
+    },
+    {
+        "question": "5. \u0627\u0633 \u0646\u0638\u0645 \u0645\u06cc\u06ba \u0644\u0641\u0638 \u201d\u0645\u0634\u0627\u0639\u0631\u06c1\u201c \u0633\u06d2 \u0645\u0631\u0627\u062f \u06c1\u06d2:",
+        "options": [
+            "\u0634\u0639\u0631 \u0633\u0646\u0646\u06d2 \u0633\u0646\u0627\u0646\u06d2 \u06a9\u06cc \u0645\u062d\u0641\u0644",
+            "\u06a9\u0631\u06a9\u0679 \u06a9\u0627 \u06a9\u06be\u06cc\u0644",
+            "\u0635\u0631\u0641 \u062a\u0641\u0631\u06cc\u062d",
+            "\u0645\u0635\u0631\u0648\u0641\u06cc\u062a"
+        ],
+        "correct_answer": "A) \u0634\u0639\u0631 \u0633\u0646\u0646\u06d2 \u0633\u0646\u0627\u0646\u06d2 \u06a9\u06cc \u0645\u062d\u0641\u0644",
+        "reference": ""
+    },
+    {
+        "question": "5. \u0627\u0633 \u0646\u0638\u0645 \u06a9\u0627 \u0645\u0636\u0645\u0648\u0646 \u06c1\u06d2:",
+        "options": [
+            "\u0633\u0646\u062c\u06cc\u062f\u06c1",
+            "\u0639\u0644\u0645\u06cc",
+            "\u0645\u0632\u0627\u062d\u064a\u0647",
+            "\u0633\u06cc\u0627\u0633\u06cc"
+        ],
+        "correct_answer": "C) \u0645\u0632\u0627\u062d\u064a\u0647",
+        "reference": ""
+    }
+]
