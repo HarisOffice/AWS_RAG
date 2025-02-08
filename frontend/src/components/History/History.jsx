@@ -396,7 +396,7 @@ export default function History() {
                                 },
                               }}
                             >
-                              {item.formData.chapters.length} Chapters
+                              {item.formData.chapters.length} Chapters  
                             </Box>
                           </Tooltip>
                         </Box>
@@ -474,6 +474,19 @@ export default function History() {
                         }}
                       >
                         {item.formData.difficulty}
+                      </Box>
+                      <Box
+                        sx={{
+                          px: 2,
+                          py: 0.5,
+                          borderRadius: 16,
+                          bgcolor: "primary.light",
+                          color: "secondary.contrastText",
+                          fontWeight: "bold",
+                          fontSize: "0.9rem",
+                        }}
+                      >
+                        {item.formData.course}
                       </Box>
                     </Box>
                   </Box>

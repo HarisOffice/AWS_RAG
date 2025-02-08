@@ -65,4 +65,21 @@ patterns = {
             "State and explain Faraday's first and second laws of electrolysis."
         ]
     },
+"computer": {
+        "short": [
+            "Why do we use a watermark in a document? Give some examples of watermark.",
+            "Which Monitor will you prefer in your school; CRT or FPD? And why?",
+            "Differentiate between Compiler and Interpreter.",
+            "Describe properties of a good communication system."
+            "Write the description of the following: <br>, <p>, <hr>"
+            "Write steps that will multiply 37 by 15 using the formula bar in MS Excel."
+        ],
+        "long": [
+            "Define Topology and explain its types.",
+            "Why is DBMS preferred over flat file system?"
+            "How an interface plays a vital role in computer? Write a command line interface and graphical user interface.",
+            "Differentiate between Data Rate and Baud Rate.",
+            "Define the following components and where are these found in computer? (i) Arithmetic and Logic Unit" 
+        ]
+    },
 }

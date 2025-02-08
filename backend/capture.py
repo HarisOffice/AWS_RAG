@@ -169,7 +169,7 @@ async def upload_txt(file: UploadFile = File(...)):
                 "text": split,
                 "embedding": embedding,
                 # "filename": file.filename
-                "name":"urdu_9.pdf"
+                "name":"computer_9.pdf"
             }
             collection.insert_one(doc_embedding)
             stored_chunks.append(doc_embedding)

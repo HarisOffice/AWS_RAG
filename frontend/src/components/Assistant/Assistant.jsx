@@ -1337,7 +1337,7 @@ export default function Assistant() {
                                     disabled={loading}
                                   />
                                 </Grid>
-                                {formData.course !== "Mathematics" && (
+                                {formData.course !== "Mathematics" && formData.course !== "Computer" &&(
                                   <Grid item xs={12} md={6}>
                                     <TextField
                                       fullWidth
